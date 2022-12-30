@@ -8,8 +8,14 @@ contract IA {
         string timeData;        
     }
 
+     struct Model {
+        string name;
+        string hash;        
+    }
+
     string[] dataset;
     Prediction[] predictions;
+    Model[] models;
     
     function storeRecords(string[] memory _records) public {
         dataset = _records;
@@ -25,6 +31,14 @@ contract IA {
 
     function retrievePredicitons() public view returns (Prediction[] memory){
         return predictions;
+    }
+    
+    function storeModel(string memory _name, string memory _hash) public {
+        models.push(Model(_name,_hash));
+    }
+
+    function retrieveModels() public view returns (Model[] memory){
+        return models;
     }
         
 }
