@@ -48,6 +48,19 @@ def obterModelos():
     
     return transaction
 
+def enviarPredicao(_predicao, _timestamp):   
+    transaction = contract.functions.storePrediction(_predicao, _timestamp).buildTransaction(
+        {
+            "gasPrice": web3.eth.gas_price,
+            "chainId": chain_id,
+            "from": account,
+            "nonce": nonce 
+        }
+    )
+    signed_transaction = web3.eth.account.sign_transaction(transaction, private_key = private_key)
+    transaction_hash = web3.eth.send_raw_transaction(signed_transaction.rawTransaction)
+    transaction_receipt = web3.eth.wait_for_transaction_receipt(transaction_hash)
+
 def compare_strings(str1, str2):
     count1 = 0
     count2 = 0
@@ -69,7 +82,7 @@ def obterModelo(name):
       return model[1]   
      
 
-print(obterModelo('IrisModel5'))
+print(obterModelo('IrisModel11'))
 
 pip install requests
 
@@ -79,7 +92,7 @@ import requests
 api_key = "9f6052849e81cca8eee4"
 secret_api_key = "1c35ddeb9ed231e7e610647f8d13bb74f52cf35bc36e3cc17ed96db5c9069534"
 
-model_hash = obterModelo('IrisModel10')
+model_hash = obterModelo('IrisModel11')
 
 url = f'https://gateway.pinata.cloud/ipfs/{model_hash}'
 headers = {'pinata_api_key': api_key, 'pinata_secret_api_key': secret_api_key}
@@ -96,7 +109,15 @@ else:
 loaded_model = pickle.load(open('modelo.h5', 'rb'))
 
 # new data to be classified
-X_new = np.array([[5.1,3.5,1.4,0.2]])
+#X_new = np.array([[5.1,3.5,1.4,0.2]])
+X_new = np.array([[1.1,2.5,2.4,1.2]])
 
 prediction = loaded_model.predict(X_new) 
 print(prediction)
+
+current_time = datetime.now()  
+time_stamp = current_time.timestamp()
+date_time = datetime.fromtimestamp(time_stamp)
+print("The date and time is:", date_time)
+
+enviarPredicao(str(prediction), str(date_time))

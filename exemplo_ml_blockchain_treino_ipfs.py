@@ -74,7 +74,7 @@ for lnh in obterRegistros():
  
 arq.close()
 
-iris = pd.read_csv("/content/drive/MyDrive/IA/Iris.csv") #load the dataset
+iris = pd.read_csv("/content/drive/MyDrive/IA/temp.csv") #load the dataset
 
 iris.head(5) #show the first 5 rows from the dataset
 
@@ -111,4 +111,5 @@ result = pinata.pin_file_to_ipfs(filename)
 # Should return the CID (unique identifier) of the file
 print(result['IpfsHash'])  
 
-enviarModelo("IrisModel10", result['IpfsHash'])
+enviarModelo("IrisModel11", result['IpfsHash'])
+os.remove("/content/drive/MyDrive/IA/temp.csv")
